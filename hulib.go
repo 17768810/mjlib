@@ -5,13 +5,15 @@ const INVALID_CARD = -1
 type HuLib struct {
 }
 
-func (this *HuLib) GetHuInfo(cards []int, cur_card int, gui_1 int, gui_2 int) bool {
+func (this *HuLib) GetHuInfo(cards []int32, cur_card int, gui_1 int, gui_2 int) bool {
 	if cur_card != INVALID_CARD {
 		cards[cur_card]++
 	}
 
-	gui_num_1 := 0
-	gui_num_2 := 0
+	var (
+		gui_num_1 int32
+		gui_num_2 int32
+	)
 	if gui_1 != INVALID_CARD {
 		gui_num_1 = cards[gui_1]
 		cards[gui_1] = 0
@@ -39,7 +41,7 @@ func (this *HuLib) GetHuInfo(cards []int, cur_card int, gui_1 int, gui_2 int) bo
 	return hu
 }
 
-func check(gui int, eye_num int, gui_num int, gui_sum int) (bool, int) {
+func check(gui int32, eye_num int32, gui_num int32, gui_sum int32) (bool, int32) {
 	if gui < 0 {
 		return false, 0
 	}
@@ -56,11 +58,13 @@ func check(gui int, eye_num int, gui_num int, gui_sum int) (bool, int) {
 	return gui_sum+(eye_num-1) <= gui_num, gui_sum
 }
 
-func (this *HuLib) split(cards []int, gui_num int) bool {
-	eye_num := 0
-	gui_sum := 0
-	gui := 0
-	ret := false
+func (this *HuLib) split(cards []int32, gui_num int32) bool {
+	var (
+		eye_num int32
+		gui_sum int32
+		gui     int32
+		ret     bool
+	)
 
 	gui, eye_num = this._split(cards, gui_num, 0, 8, true, eye_num)
 	ret, gui_sum = check(gui, eye_num, gui_num, gui_sum)
@@ -93,77 +97,44 @@ func (this *HuLib) split(cards []int, gui_num int) bool {
 	return true
 }
 
-// 1→0
-// 10→10
-// 2→110
-// 20→1110
-// 3→11110
-// 30→111110
-// 4→1111110
-// 40→11111110
-func (this *HuLib) _split(cards []int, gui_num int, min int, max int, xu bool, eye_num int) (int, int) {
-	key := 0
-	p := -1
-	b := false
-	num := 0
+func (this *HuLib) _split(cards []int32, gui_num int32, min int, max int, xu bool, eye_num int32) (int32, int32) {
+	var (
+		key int32
+		b   bool
+		num int32
+	)
 
 	if xu {
 		for i := min; i <= max; i++ {
 			num = num + cards[i]
 
-			if cards[i] == 0 {
-				if b {
-					b = false
-					key |= 0x1 << uint32(p)
-					p++
-				}
-			} else {
-				if cards[i] > 4 {
-					key = 0
-					b = false
-					break
-				}
-				p++
+			if cards[i] > 4 {
+				key = 0
+				break
+			}
+			if cards[i] > 0 {
 				b = true
-				switch cards[i] {
-				case 2:
-					key |= 0x3 << uint32(p)
-					p += 2
-				case 3:
-					key |= 0xF << uint32(p)
-					p += 4
-				case 4:
-					key |= 0x3F << uint32(p)
-					p += 6
+				key = key*10 + cards[i]
+			} else {
+				if b {
+					key = key*10 + cards[i]
+					b = false
 				}
 			}
 		}
-		if b {
-			key |= 0x1 << uint32(p)
+		if !b {
+			key = key / 10
 		}
 	} else {
 		for i := min; i <= max; i++ {
 			num = num + cards[i]
 
+			if cards[i] > 4 {
+				key = 0
+				break
+			}
 			if cards[i] > 0 {
-				if cards[i] > 4 {
-					key = 0
-					break
-				}
-				p++
-				switch cards[i] {
-				case 2:
-					key |= 0x3 << uint32(p)
-					p += 2
-				case 3:
-					key |= 0xF << uint32(p)
-					p += 4
-				case 4:
-					key |= 0x3F << uint32(p)
-					p += 6
-				}
-				key |= 0x1 << uint32(p)
-				p++
+				key = key*10 + cards[i]
 			}
 		}
 	}
@@ -172,7 +143,7 @@ func (this *HuLib) _split(cards []int, gui_num int, min int, max int, xu bool, e
 		return 0, eye_num
 	}
 
-	for i := 0; i <= gui_num; i++ {
+	for i := int32(0); i <= gui_num; i++ {
 		yu := (num + i) % 3
 		if yu == 1 {
 			continue
@@ -189,8 +160,8 @@ func (this *HuLib) _split(cards []int, gui_num int, min int, max int, xu bool, e
 	return -1, 0
 }
 
-func (this *HuLib) check_7dui(cards []int, gui_num int) bool {
-	need := 0
+func (this *HuLib) check_7dui(cards []int32, gui_num int32) bool {
+	var need int32
 	for i := 0; i < 34; i++ {
 		if cards[i]%2 != 0 {
 			need = need + 1

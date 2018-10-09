@@ -33,7 +33,7 @@ func (this *TableMgr) Init() {
 	}
 }
 
-func (this *TableMgr) getTable(gui_num int, eye bool, xu bool) *Table {
+func (this *TableMgr) getTable(gui_num int32, eye bool, xu bool) *Table {
 	var tbl *Table
 	if xu {
 		if eye {
@@ -51,12 +51,12 @@ func (this *TableMgr) getTable(gui_num int, eye bool, xu bool) *Table {
 	return tbl
 }
 
-func (this *TableMgr) Add(key int, gui_num int, eye bool, xu bool) {
+func (this *TableMgr) Add(key int32, gui_num int32, eye bool, xu bool) {
 	tbl := this.getTable(gui_num, eye, xu)
 	tbl.add(key)
 }
 
-func (this *TableMgr) check(key int, gui_num int, eye bool, xu bool) bool {
+func (this *TableMgr) check(key int32, gui_num int32, eye bool, xu bool) bool {
 	tbl := this.getTable(gui_num, eye, xu)
 	return tbl.check(key)
 }

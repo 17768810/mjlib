@@ -1,54 +1,34 @@
 package mjlib
 
-var gui_tested = [9]*map[int]bool{}
-var gui_eye_tested = [9]*map[int]bool{}
+var gui_tested = [9]*map[int32]bool{}
+var gui_eye_tested = [9]*map[int32]bool{}
 
-// 1→0
-// 10→10
-// 2→110
-// 20→1110
-// 3→11110
-// 30→111110
-// 4→1111110
-// 40→11111110
-func check_add(cards []int, gui_num int, eye bool) bool {
-	key := 0
-	p := -1
-	b := false
+func check_add(cards []int32, gui_num int32, eye bool) bool {
+	var (
+		key int32
+		b   bool
+	)
 
 	for i := 0; i < 9; i++ {
-		if cards[i] == 0 {
-			if b {
-				b = false
-				key |= 0x1 << uint32(p)
-				p++
-			}
-		} else {
-			if cards[i] > 4 {
-				key = 0
-				b = false
-				break
-			}
-			p++
+		if cards[i] > 4 {
+			key = 0
+			break
+		}
+		if cards[i] > 0 {
 			b = true
-			switch cards[i] {
-			case 2:
-				key |= 0x3 << uint32(p)
-				p += 2
-			case 3:
-				key |= 0xF << uint32(p)
-				p += 4
-			case 4:
-				key |= 0x3F << uint32(p)
-				p += 6
+			key = key*10 + cards[i]
+		} else {
+			if b {
+				key = key*10 + cards[i]
+				b = false
 			}
 		}
 	}
-	if b {
-		key |= 0x1 << uint32(p)
+	if !b {
+		key = key / 10
 	}
 
-	var m *map[int]bool
+	var m *map[int32]bool
 	if !eye {
 		m = gui_tested[gui_num]
 	} else {
@@ -71,7 +51,7 @@ func check_add(cards []int, gui_num int, eye bool) bool {
 	return true
 }
 
-func parse_table_sub(cards []int, num int, eye bool) {
+func parse_table_sub(cards []int32, num int32, eye bool) {
 	for i := 0; i < 9; i++ {
 		if cards[i] == 0 {
 			continue
@@ -91,14 +71,14 @@ func parse_table_sub(cards []int, num int, eye bool) {
 	}
 }
 
-func parse_table(cards []int, eye bool) {
+func parse_table(cards []int32, eye bool) {
 	if !check_add(cards, 0, eye) {
 		return
 	}
 	parse_table_sub(cards, 1, eye)
 }
 
-func gen_111_3(cards []int, level int, eye bool, maxLevel int) {
+func gen_111_3(cards []int32, level int, eye bool, maxLevel int) {
 	for i := 0; i < 16; i++ {
 		if i <= 8 {
 			if cards[i] > 3 {
@@ -110,9 +90,9 @@ func gen_111_3(cards []int, level int, eye bool, maxLevel int) {
 			if cards[index] > 5 || cards[index+1] > 5 || cards[index+2] > 5 {
 				continue
 			}
-			cards[index] += 1
-			cards[index+1] += 1
-			cards[index+2] += 1
+			cards[index]++
+			cards[index+1]++
+			cards[index+2]++
 		}
 
 		parse_table(cards, eye)
@@ -124,20 +104,20 @@ func gen_111_3(cards []int, level int, eye bool, maxLevel int) {
 			cards[i] -= 3
 		} else {
 			index := i - 9
-			cards[index] -= 1
-			cards[index+1] -= 1
-			cards[index+2] -= 1
+			cards[index]--
+			cards[index+1]--
+			cards[index+2]--
 		}
 	}
 }
 
 func gen_table(maxLevel int) {
 	for i := 0; i < 9; i++ {
-		gui_tested[i] = &map[int]bool{}
-		gui_eye_tested[i] = &map[int]bool{}
+		gui_tested[i] = &map[int32]bool{}
+		gui_eye_tested[i] = &map[int32]bool{}
 	}
 
-	cards := []int{
+	cards := []int32{
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 	}
 
@@ -157,8 +137,8 @@ func gen_table(maxLevel int) {
 	}
 	// fmt.Printf("有眼表生成结束\n")
 
-	gui_tested = [9]*map[int]bool{}
-	gui_eye_tested = [9]*map[int]bool{}
+	gui_tested = [9]*map[int32]bool{}
+	gui_eye_tested = [9]*map[int32]bool{}
 
 	// fmt.Printf("表数据存储开始\n")
 	// MTableMgr.DumpTable()

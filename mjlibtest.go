@@ -5,14 +5,14 @@ import (
 	"time"
 )
 
-var g_cards = []int{
+var g_cards = []int32{
 	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, // 万
 	0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, // 条
 	0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, // 筒
 	0x31, 0x41, 0x51, 0x61, 0x71, 0x81, 0x91, // 东南西北中发白
 }
 
-func value2index(value int) int {
+func value2index(value int32) int32 {
 	if value < 0x31 {
 		return ((value&0xF0)>>4)*9 + (value & 0x0F) - 1
 	} else {
@@ -20,38 +20,38 @@ func value2index(value int) int {
 	}
 }
 
-func count(cards []int) []int {
-	nums := make([]int, 34)
+func count(cards []int32) []int32 {
+	nums := make([]int32, 34)
 	for _, v := range cards {
 		nums[value2index(v)]++
 	}
 	return nums
 }
 
-func getPairs() [][]int {
-	pairs := make([][]int, 0, len(g_cards))
+func getPairs() [][]int32 {
+	pairs := make([][]int32, 0, len(g_cards))
 
 	for _, v := range g_cards {
-		pair := []int{v, v}
+		pair := []int32{v, v}
 		pairs = append(pairs, pair)
 	}
 
 	return pairs
 }
 
-func getGroups() [][]int {
-	groups := make([][]int, 0, len(g_cards)+(9-2)*3)
+func getGroups() [][]int32 {
+	groups := make([][]int32, 0, len(g_cards)+(9-2)*3)
 
 	// find three identical tiles
 	for _, v := range g_cards {
-		group := []int{v, v, v}
+		group := []int32{v, v, v}
 		groups = append(groups, group)
 	}
 
 	// find three sequence tiles
 	for i := 2; i < len(g_cards); i++ {
 		if g_cards[i-2]+1 == g_cards[i-1] && g_cards[i-1] == g_cards[i]-1 {
-			group := []int{g_cards[i-2], g_cards[i-1], g_cards[i]}
+			group := []int32{g_cards[i-2], g_cards[i-1], g_cards[i]}
 			groups = append(groups, group)
 		}
 	}
@@ -72,31 +72,31 @@ func TestAll() {
 		encode(p)
 
 		for _, a := range groups {
-			var a_temp []int
+			var a_temp []int32
 			a_temp = append(a_temp, p...)
 			a_temp = append(a_temp, a...)
 			encode(a_temp)
 
 			for _, b := range groups {
-				var b_temp []int
+				var b_temp []int32
 				b_temp = append(b_temp, a_temp...)
 				b_temp = append(b_temp, b...)
 				encode(b_temp)
 
 				for _, c := range groups {
-					var c_temp []int
+					var c_temp []int32
 					c_temp = append(c_temp, b_temp...)
 					c_temp = append(c_temp, c...)
 					encode(c_temp)
 
 					for _, d := range groups {
-						var d_temp []int
+						var d_temp []int32
 						d_temp = append(d_temp, c_temp...)
 						d_temp = append(d_temp, d...)
 						encode(d_temp)
 
 						for _, e := range groups {
-							var e_temp []int
+							var e_temp []int32
 							e_temp = append(e_temp, d_temp...)
 							e_temp = append(e_temp, e...)
 							encode(e_temp)
@@ -111,7 +111,7 @@ func TestAll() {
 	fmt.Println("use time=", time.Now().Unix()-start)
 }
 
-func encode(cards []int) {
+func encode(cards []int32) {
 	nums := count(cards)
 
 	if checkIsValid(nums) {
@@ -131,9 +131,9 @@ func encode(cards []int) {
 	}
 }
 
-func checkIsValid(nums []int) bool {
+func checkIsValid(nums []int32) bool {
 
-	allNum := 0
+	var allNum int32
 
 	for _, v := range nums {
 		allNum += v
@@ -149,7 +149,7 @@ func checkIsValid(nums []int) bool {
 	return true
 }
 
-func print_cards(cards []int) {
+func print_cards(cards []int32) {
 	for i := 0; i < 9; i++ {
 		fmt.Printf("%d,", cards[i])
 	}
@@ -171,16 +171,16 @@ func print_cards(cards []int) {
 	fmt.Printf("\n")
 }
 
-var tested = map[int]bool{}
+var tested = map[int32]bool{}
 
-func check_hu(cards []int, max int) {
+func check_hu(cards []int32, max int) {
 	for i := 0; i < max; i++ {
 		if cards[i] > 4 {
 			return
 		}
 	}
 
-	num := 0
+	var num int32
 	for i := 0; i < 9; i++ {
 		num = num*10 + cards[i]
 	}
@@ -200,7 +200,7 @@ func check_hu(cards []int, max int) {
 	}
 }
 
-func gen_auto_table_sub(cards []int, level int) {
+func gen_auto_table_sub(cards []int32, level int) {
 	for i := 0; i < 32; i++ {
 		index := -1
 		if i <= 17 {
@@ -235,7 +235,7 @@ func gen_auto_table_sub(cards []int, level int) {
 
 func test_two_color() {
 	fmt.Println("测试两种花色")
-	cards := []int{
+	cards := []int32{
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -259,10 +259,17 @@ func test_one_success() {
 	// }
 
 	// [402 402 205 205 205 403 403 403 202 203 204 107 108 109 205 206 207]
-	cards := []int{
+	// cards := []int{
+	// 	0, 0, 0, 0, 0, 0, 0, 0, 0,
+	// 	0, 0, 0, 0, 0, 0, 0, 0, 0,
+	// 	0, 3, 3, 0, 3, 4, 3, 1, 0,
+	// 	0, 0, 0, 0, 0, 0, 0,
+	// }
+
+	cards := []int32{
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		2, 3, 0, 3, 0, 3, 0, 3, 3,
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 3, 3, 0, 3, 4, 3, 1, 0,
 		0, 0, 0, 0, 0, 0, 0,
 	}
 
@@ -276,7 +283,7 @@ func test_one_success() {
 }
 
 func test_one_fail() {
-	cards := []int{
+	cards := []int32{
 		0, 1, 1, 1, 0, 0, 1, 0, 1,
 		0, 1, 1, 1, 0, 0, 2, 2, 2,
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -293,7 +300,7 @@ func test_one_fail() {
 }
 
 func test_time(count int) {
-	cards := []int{
+	cards := []int32{
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 3, 4, 1, 1, 0,
@@ -317,7 +324,7 @@ func Test() {
 	// MTableMgr.LoadziTable()
 
 	test_one_success()
-	test_one_fail()
+	// test_one_fail()
 	// test_time(100000000)
 	//    test_two_color()
 }

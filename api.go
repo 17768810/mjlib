@@ -29,7 +29,7 @@ func Init(mjType int) {
 	}
 
 	start := time.Now().Unix()
-	println("generate hu tpl start")
+	println("generate hu tpl begin...")
 
 	gen_table(maxLevel)
 	gen_zi_table(maxLevel)

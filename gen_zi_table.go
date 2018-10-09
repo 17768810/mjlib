@@ -1,44 +1,22 @@
 package mjlib
 
-var zi_gui_tested = [9]*map[int]bool{}
-var zi_gui_eye_tested = [9]*map[int]bool{}
+var zi_gui_tested = [9]*map[int32]bool{}
+var zi_gui_eye_tested = [9]*map[int32]bool{}
 
-// 1→0
-// 10→10
-// 2→110
-// 20→1110
-// 3→11110
-// 30→111110
-// 4→1111110
-// 40→11111110
-func zi_check_add(cards []int, gui_num int, eye bool) bool {
-	key := 0
-	p := -1
+func zi_check_add(cards []int32, gui_num int32, eye bool) bool {
+	var key int32
 
 	for i := 0; i < 7; i++ {
+		if cards[i] > 4 {
+			key = 0
+			break
+		}
 		if cards[i] > 0 {
-			if cards[i] > 4 {
-				key = 0
-				break
-			}
-			p++
-			switch cards[i] {
-			case 2:
-				key |= 0x3 << uint32(p)
-				p += 2
-			case 3:
-				key |= 0xF << uint32(p)
-				p += 4
-			case 4:
-				key |= 0x3F << uint32(p)
-				p += 6
-			}
-			key |= 0x1 << uint32(p)
-			p++
+			key = key*10 + cards[i]
 		}
 	}
 
-	var m *map[int]bool
+	var m *map[int32]bool
 	if !eye {
 		m = zi_gui_tested[gui_num]
 	} else {
@@ -61,7 +39,7 @@ func zi_check_add(cards []int, gui_num int, eye bool) bool {
 	return true
 }
 
-func parse_zi_table_sub(cards []int, num int, eye bool) {
+func parse_zi_table_sub(cards []int32, num int32, eye bool) {
 	for i := 0; i < 7; i++ {
 		if cards[i] == 0 {
 			continue
@@ -81,14 +59,14 @@ func parse_zi_table_sub(cards []int, num int, eye bool) {
 	}
 }
 
-func parse_zi_table(cards []int, eye bool) {
+func parse_zi_table(cards []int32, eye bool) {
 	if !zi_check_add(cards, 0, eye) {
 		return
 	}
 	parse_zi_table_sub(cards, 1, eye)
 }
 
-func gen_3(cards []int, level int, eye bool, maxLevel int) {
+func gen_3(cards []int32, level int, eye bool, maxLevel int) {
 	for i := 0; i < 7; i++ {
 		if cards[i] > 3 {
 			continue
@@ -106,11 +84,11 @@ func gen_3(cards []int, level int, eye bool, maxLevel int) {
 
 func gen_zi_table(maxLevel int) {
 	for i := 0; i < 9; i++ {
-		zi_gui_tested[i] = &map[int]bool{}
-		zi_gui_eye_tested[i] = &map[int]bool{}
+		zi_gui_tested[i] = &map[int32]bool{}
+		zi_gui_eye_tested[i] = &map[int32]bool{}
 	}
 
-	cards := []int{
+	cards := []int32{
 		0, 0, 0, 0, 0, 0, 0,
 	}
 
@@ -130,8 +108,8 @@ func gen_zi_table(maxLevel int) {
 	}
 	// fmt.Printf("有眼表生成结束\n")
 
-	zi_gui_tested = [9]*map[int]bool{}
-	zi_gui_eye_tested = [9]*map[int]bool{}
+	zi_gui_tested = [9]*map[int32]bool{}
+	zi_gui_eye_tested = [9]*map[int32]bool{}
 
 	// fmt.Printf("表数据存储开始\n")
 	// MTableMgr.DumpziTable()

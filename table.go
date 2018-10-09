@@ -9,19 +9,19 @@ import (
 )
 
 type Table struct {
-	tbl map[int]struct{}
+	tbl map[int32]struct{}
 }
 
 func (this *Table) init() {
-	this.tbl = map[int]struct{}{}
+	this.tbl = map[int32]struct{}{}
 }
 
-func (this *Table) check(key int) bool {
+func (this *Table) check(key int32) bool {
 	_, ok := this.tbl[key]
 	return ok
 }
 
-func (this *Table) add(key int) {
+func (this *Table) add(key int32) {
 	this.tbl[key] = struct{}{}
 }
 
@@ -30,7 +30,7 @@ func (this *Table) dump(name string) {
 	defer file.Close()
 	buf := bufio.NewWriter(file)
 	for key := range this.tbl {
-		n := int(key)
+		n := int32(key)
 		fmt.Fprintf(buf, "%d\n", n)
 	}
 	buf.Flush()
@@ -48,6 +48,6 @@ func (this *Table) load(name string) {
 		}
 		str := string(buf)
 		key, _ := strconv.Atoi(str)
-		this.tbl[key] = struct{}{}
+		this.tbl[int32(key)] = struct{}{}
 	}
 }
