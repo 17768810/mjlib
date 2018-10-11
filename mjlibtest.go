@@ -115,14 +115,14 @@ func encode(cards []int32) {
 	nums := count(cards)
 
 	if checkIsValid(nums) {
-		if !MHuLib.GetHuInfo(nums, -1, -1, -1) {
+		if !HuMod.GetHuInfo(nums, -1, -1, -1) {
 			print_cards(nums)
 			panic("hu err!")
 		} else {
 			// print_cards(nums)
 		}
 	} else {
-		if MHuLib.GetHuInfo(nums, -1, -1, -1) {
+		if HuMod.GetHuInfo(nums, -1, -1, -1) {
 			print_cards(nums)
 			panic("no hu err!")
 		} else {
@@ -193,7 +193,7 @@ func check_hu(cards []int32, max int) {
 	tested[num] = true
 
 	for i := 0; i < max; i++ {
-		if !MHuLib.GetHuInfo(cards, -1, -1, -1) {
+		if !HuMod.GetHuInfo(cards, -1, -1, -1) {
 			fmt.Printf("测试失败 i=%d\n", i)
 			print_cards(cards)
 		}
@@ -275,7 +275,7 @@ func test_one_success() {
 
 	fmt.Println("测试1种能胡的牌型")
 	print_cards(cards)
-	if MHuLib.GetHuInfo(cards, -1, -1, -1) {
+	if HuMod.GetHuInfo(cards, -1, -1, -1) {
 		fmt.Println("测试通过：胡牌")
 	} else {
 		fmt.Println("测试失败：能胡的牌型判断为不能胡牌")
@@ -292,7 +292,7 @@ func test_one_fail() {
 
 	fmt.Println("测试1种不能胡的牌型")
 	print_cards(cards)
-	if !MHuLib.GetHuInfo(cards, -1, -1, -1) {
+	if !HuMod.GetHuInfo(cards, -1, -1, -1) {
 		fmt.Println("测试通过：不能胡牌")
 	} else {
 		fmt.Println("测试失败：不能胡牌的牌型判断为胡了")
@@ -310,18 +310,18 @@ func test_time(count int) {
 	print_cards(cards)
 	start := time.Now().Unix()
 	for i := 0; i < count; i++ {
-		MHuLib.GetHuInfo(cards, -1, -1, -1)
+		HuMod.GetHuInfo(cards, -1, -1, -1)
 	}
 	print_cards(cards)
 	fmt.Println("count=", count, "use time=", time.Now().Unix()-start)
 }
 
 func Test() {
-	fmt.Println("test hulib begin...")
+	fmt.Println("test huMod begin...")
 
 	// Init()
-	// MTableMgr.LoadTable()
-	// MTableMgr.LoadziTable()
+	// TableMod.LoadTable()
+	// TableMod.LoadziTable()
 
 	test_one_success()
 	// test_one_fail()

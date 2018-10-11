@@ -4,14 +4,14 @@ import (
 	"fmt"
 )
 
-type TableMgr struct {
+type tableMod struct {
 	m_tbl        [9]*Table
 	m_eye_tbl    [9]*Table
 	m_zi_tbl     [9]*Table
 	m_zi_eye_tbl [9]*Table
 }
 
-func (this *TableMgr) Init() {
+func (this *tableMod) Init() {
 	for i := 0; i < 9; i++ {
 		this.m_tbl[i] = &Table{}
 		this.m_tbl[i].init()
@@ -33,7 +33,7 @@ func (this *TableMgr) Init() {
 	}
 }
 
-func (this *TableMgr) getTable(gui_num int32, eye bool, xu bool) *Table {
+func (this *tableMod) getTable(gui_num int32, eye bool, xu bool) *Table {
 	var tbl *Table
 	if xu {
 		if eye {
@@ -51,17 +51,17 @@ func (this *TableMgr) getTable(gui_num int32, eye bool, xu bool) *Table {
 	return tbl
 }
 
-func (this *TableMgr) Add(key int32, gui_num int32, eye bool, xu bool) {
+func (this *tableMod) Add(key int32, gui_num int32, eye bool, xu bool) {
 	tbl := this.getTable(gui_num, eye, xu)
 	tbl.add(key)
 }
 
-func (this *TableMgr) check(key int32, gui_num int32, eye bool, xu bool) bool {
+func (this *tableMod) check(key int32, gui_num int32, eye bool, xu bool) bool {
 	tbl := this.getTable(gui_num, eye, xu)
 	return tbl.check(key)
 }
 
-func (this *TableMgr) LoadTable() {
+func (this *tableMod) LoadTable() {
 	for i := 0; i < 9; i++ {
 		name := fmt.Sprintf("tbl/table_%d.tbl", i)
 		this.m_tbl[i].load(name)
@@ -74,7 +74,7 @@ func (this *TableMgr) LoadTable() {
 
 }
 
-func (this *TableMgr) DumpTable() {
+func (this *tableMod) DumpTable() {
 	for i := 0; i < 9; i++ {
 		name := fmt.Sprintf("tbl/table_%d.tbl", i)
 		this.m_tbl[i].dump(name)
@@ -87,7 +87,7 @@ func (this *TableMgr) DumpTable() {
 
 }
 
-func (this *TableMgr) LoadziTable() {
+func (this *tableMod) LoadziTable() {
 	for i := 0; i < 9; i++ {
 		name := fmt.Sprintf("tbl/zi_table_%d.tbl", i)
 		this.m_zi_tbl[i].load(name)
@@ -99,7 +99,7 @@ func (this *TableMgr) LoadziTable() {
 	}
 }
 
-func (this *TableMgr) DumpziTable() {
+func (this *tableMod) DumpziTable() {
 	for i := 0; i < 9; i++ {
 		name := fmt.Sprintf("tbl/zi_table_%d.tbl", i)
 		this.m_zi_tbl[i].dump(name)

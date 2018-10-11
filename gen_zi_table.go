@@ -34,7 +34,7 @@ func zi_check_add(cards []int32, gui_num int32, eye bool) bool {
 		return true
 	}
 
-	MTableMgr.Add(key, gui_num, eye, false)
+	TableMod.Add(key, gui_num, eye, false)
 
 	return true
 }
@@ -74,7 +74,7 @@ func gen_3(cards []int32, level int, eye bool, maxLevel int) {
 		cards[i] += 3
 
 		parse_zi_table(cards, eye)
-		if level < 5 {
+		if level < maxLevel {
 			gen_3(cards, level+1, eye, maxLevel)
 		}
 
@@ -112,6 +112,6 @@ func gen_zi_table(maxLevel int) {
 	zi_gui_eye_tested = [9]*map[int32]bool{}
 
 	// fmt.Printf("表数据存储开始\n")
-	// MTableMgr.DumpziTable()
+	// TableMod.DumpziTable()
 	// fmt.Printf("表数据存储结束\n")
 }

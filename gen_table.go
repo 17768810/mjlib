@@ -46,7 +46,7 @@ func check_add(cards []int32, gui_num int32, eye bool) bool {
 		return true
 	}
 
-	MTableMgr.Add(key, gui_num, eye, true)
+	TableMod.Add(key, gui_num, eye, true)
 
 	return true
 }
@@ -141,6 +141,6 @@ func gen_table(maxLevel int) {
 	gui_eye_tested = [9]*map[int32]bool{}
 
 	// fmt.Printf("表数据存储开始\n")
-	// MTableMgr.DumpTable()
+	// TableMod.DumpTable()
 	// fmt.Printf("表数据存储结束\n")
 }

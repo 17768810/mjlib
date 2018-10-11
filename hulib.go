@@ -2,10 +2,10 @@ package mjlib
 
 const INVALID_CARD = -1
 
-type HuLib struct {
+type huMod struct {
 }
 
-func (this *HuLib) GetHuInfo(cards []int32, cur_card int, gui_1 int, gui_2 int) bool {
+func (this *huMod) GetHuInfo(cards []int32, cur_card int, gui_1 int, gui_2 int) bool {
 	if cur_card != INVALID_CARD {
 		cards[cur_card]++
 	}
@@ -14,6 +14,7 @@ func (this *HuLib) GetHuInfo(cards []int32, cur_card int, gui_1 int, gui_2 int) 
 		gui_num_1 int32
 		gui_num_2 int32
 	)
+
 	if gui_1 != INVALID_CARD {
 		gui_num_1 = cards[gui_1]
 		cards[gui_1] = 0
@@ -58,7 +59,7 @@ func check(gui int32, eye_num int32, gui_num int32, gui_sum int32) (bool, int32)
 	return gui_sum+(eye_num-1) <= gui_num, gui_sum
 }
 
-func (this *HuLib) split(cards []int32, gui_num int32) bool {
+func (this *huMod) split(cards []int32, gui_num int32) bool {
 	var (
 		eye_num int32
 		gui_sum int32
@@ -97,7 +98,7 @@ func (this *HuLib) split(cards []int32, gui_num int32) bool {
 	return true
 }
 
-func (this *HuLib) _split(cards []int32, gui_num int32, min int, max int, xu bool, eye_num int32) (int32, int32) {
+func (this *huMod) _split(cards []int32, gui_num int32, min int, max int, xu bool, eye_num int32) (int32, int32) {
 	var (
 		key int32
 		b   bool
@@ -106,7 +107,7 @@ func (this *HuLib) _split(cards []int32, gui_num int32, min int, max int, xu boo
 
 	if xu {
 		for i := min; i <= max; i++ {
-			num = num + cards[i]
+			num += cards[i]
 
 			if cards[i] > 4 {
 				key = 0
@@ -127,7 +128,7 @@ func (this *HuLib) _split(cards []int32, gui_num int32, min int, max int, xu boo
 		}
 	} else {
 		for i := min; i <= max; i++ {
-			num = num + cards[i]
+			num += cards[i]
 
 			if cards[i] > 4 {
 				key = 0
@@ -149,7 +150,7 @@ func (this *HuLib) _split(cards []int32, gui_num int32, min int, max int, xu boo
 			continue
 		}
 		eye := (yu == 2)
-		if MTableMgr.check(key, i, eye, xu) {
+		if TableMod.check(key, i, eye, xu) {
 			if eye {
 				eye_num++
 			}
@@ -160,7 +161,7 @@ func (this *HuLib) _split(cards []int32, gui_num int32, min int, max int, xu boo
 	return -1, 0
 }
 
-func (this *HuLib) check_7dui(cards []int32, gui_num int32) bool {
+func (this *huMod) check_7dui(cards []int32, gui_num int32) bool {
 	var need int32
 	for i := 0; i < 34; i++ {
 		if cards[i]%2 != 0 {
@@ -173,4 +174,9 @@ func (this *HuLib) check_7dui(cards []int32, gui_num int32) bool {
 	}
 
 	return true
+}
+
+func (this *huMod) check_8dui_ban(cards []int32, gui_num int32) bool {
+	gui_num++
+	return this.check_7dui(cards, gui_num)
 }
