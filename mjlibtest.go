@@ -273,12 +273,12 @@ func test_one_success() {
 		0, 0, 0, 0, 0, 0, 0,
 	}
 
-	fmt.Println("测试1种能胡的牌型")
+	fmt.Println("测试1种能和的牌型")
 	print_cards(cards)
 	if HuMod.GetHuInfo(cards, -1, -1, -1) {
-		fmt.Println("测试通过：胡牌")
+		fmt.Println("测试通过：和牌")
 	} else {
-		fmt.Println("测试失败：能胡的牌型判断为不能胡牌")
+		fmt.Println("测试失败：能和的牌型判断为不能和牌")
 	}
 }
 
@@ -290,12 +290,12 @@ func test_one_fail() {
 		0, 0, 0, 0, 0, 0, 0,
 	}
 
-	fmt.Println("测试1种不能胡的牌型")
+	fmt.Println("测试1种不能和的牌型")
 	print_cards(cards)
 	if !HuMod.GetHuInfo(cards, -1, -1, -1) {
-		fmt.Println("测试通过：不能胡牌")
+		fmt.Println("测试通过：不能和牌")
 	} else {
-		fmt.Println("测试失败：不能胡牌的牌型判断为胡了")
+		fmt.Println("测试失败：不能和牌的牌型判断为和了")
 	}
 }
 
