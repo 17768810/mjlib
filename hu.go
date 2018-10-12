@@ -161,7 +161,7 @@ func (this *huMod) _split(cards []int32, gui_num int32, min int, max int, xu boo
 	return -1, 0
 }
 
-func (this *huMod) check_7dui(cards []int32, gui_num int32) bool {
+func (this *huMod) Check7Dui(cards []int32, gui_num int32) bool {
 	var need int32
 	for i := 0; i < 34; i++ {
 		if cards[i]%2 != 0 {
@@ -176,7 +176,22 @@ func (this *huMod) check_7dui(cards []int32, gui_num int32) bool {
 	return true
 }
 
-func (this *huMod) check_8dui_ban(cards []int32, gui_num int32) bool {
+func (this *huMod) Check8DuiBan(cards []int32, gui_num int32) bool {
 	gui_num++
-	return this.check_7dui(cards, gui_num)
+	return this.Check7Dui(cards, gui_num)
+}
+
+func (this *huMod) Check4Gang(cards []int32) bool {
+	var gangNum int32
+	for i := 0; i < 34; i++ {
+		if cards[i] == 4 {
+			gangNum++
+		}
+	}
+
+	if gangNum == 4 {
+		return true
+	}
+
+	return false
 }
