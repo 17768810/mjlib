@@ -176,22 +176,16 @@ func (this *huMod) Check7Dui(cards []int32, gui_num int32) bool {
 	return true
 }
 
-func (this *huMod) Check8DuiBan(cards []int32, gui_num int32) bool {
-	gui_num++
-	return this.Check7Dui(cards, gui_num)
-}
-
-func (this *huMod) Check4Gang(cards []int32) bool {
-	var gangNum int32
+func (this *huMod) Check8DuiBan(cards []int32) bool {
 	for i := 0; i < 34; i++ {
-		if cards[i] == 4 {
-			gangNum++
+		if cards[i] == 3 {
+			cards[i] -= 3
+			if this.Check7Dui(cards, 0) {
+				cards[i] += 3
+				return true
+			}
+			cards[i] += 3
 		}
 	}
-
-	if gangNum == 4 {
-		return true
-	}
-
 	return false
 }
