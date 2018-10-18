@@ -48,7 +48,7 @@ func (this *utilMod) GetAAAList(cards []int32) (aaaList []int) {
 	return
 }
 
-func (this *utilMod) GetListenCards(cards []int32, hu bool, gui_1 int, gui_2 int) (listenCards []int) {
+func (this *utilMod) GetTingCards(cards []int32, hu bool, gui_1 int, gui_2 int) (tingCards []int) {
 	var (
 		gui_num_1 int32
 		gui_num_2 int32
@@ -71,7 +71,7 @@ func (this *utilMod) GetListenCards(cards []int32, hu bool, gui_1 int, gui_2 int
 			}
 			cards[i]++
 			if HuMod.split(cards, gui_num_1+gui_num_2) {
-				listenCards = append(listenCards, i)
+				tingCards = append(tingCards, i)
 			}
 			cards[i]--
 		}
@@ -80,7 +80,7 @@ func (this *utilMod) GetListenCards(cards []int32, hu bool, gui_1 int, gui_2 int
 			if cards[i] > 0 {
 				cards[i]--
 				if HuMod.split(cards, gui_num_1+gui_num_2+1) {
-					listenCards = append(listenCards, i)
+					tingCards = append(tingCards, i)
 				}
 				cards[i]++
 			}
