@@ -177,23 +177,16 @@ func (this *huMod) Check7Dui(cards []int32, gui_num int32) bool {
 }
 
 func (this *huMod) Check8DuiBan(cards []int32) bool {
-	keNum := 0
-
 	for i := 0; i < 34; i++ {
 		if cards[i] == 3 {
-			keNum++
 			cards[i] -= 3
-			if !this.Check7Dui(cards, 0) {
+			if this.Check7Dui(cards, 0) {
 				cards[i] += 3
-				return false
+				return true
 			}
 			cards[i] += 3
+			return false
 		}
 	}
-
-	if keNum != 1 {
-		return false
-	}
-
-	return true
+	return false
 }
