@@ -9,15 +9,17 @@ var (
 	TableMod *tableMod
 	HuMod    *huMod
 	UtilMod  *utilMod
+	XuMod    *xuMod
+	ZiMod    *ziMod
 )
 
-func Init(mjType int) {
+func Init(mjType int32, maxGuiNum int32) {
 	TableMod = &tableMod{}
 	TableMod.Init()
 	HuMod = &huMod{}
 	UtilMod = &utilMod{}
 
-	var maxLevel int
+	var maxLevel int32
 
 	switch mjType {
 	case MJ_TYPE_13:
@@ -28,11 +30,16 @@ func Init(mjType int) {
 		panic("mjType wrong!")
 	}
 
+	XuMod = NewXuMod(maxLevel, maxGuiNum)
+	ZiMod = NewZiMod(maxLevel, maxGuiNum)
 	// start := time.Now().Unix()
 	// println("generate hu tpl begin...")
 
-	gen_table(maxLevel)
-	gen_zi_table(maxLevel)
+	XuMod.gen_table()
+	ZiMod.gen_zi_table()
+
+	XuMod = nil
+	ZiMod = nil
 
 	// println("generate hu tpl end, use time =", time.Now().Unix()-start, "second")
 }

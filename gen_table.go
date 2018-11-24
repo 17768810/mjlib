@@ -1,9 +1,22 @@
 package mjlib
 
-var gui_tested = [9]*map[int32]bool{}
-var gui_eye_tested = [9]*map[int32]bool{}
+type xuMod struct {
+	maxLevel       int32
+	maxGuiNum      int32
+	gui_tested     [9]*map[int32]bool
+	gui_eye_tested [9]*map[int32]bool
+}
 
-func check_add(cards []int32, gui_num int32, eye bool) bool {
+func NewXuMod(maxLevel int32, maxGuiNum int32) *xuMod {
+	return &xuMod{
+		maxLevel:       maxLevel,
+		maxGuiNum:      maxGuiNum,
+		gui_tested:     [9]*map[int32]bool{},
+		gui_eye_tested: [9]*map[int32]bool{},
+	}
+}
+
+func (this *xuMod) check_add(cards []int32, gui_num int32, eye bool) bool {
 	var (
 		key int32
 		b   bool
@@ -30,9 +43,9 @@ func check_add(cards []int32, gui_num int32, eye bool) bool {
 
 	var m *map[int32]bool
 	if !eye {
-		m = gui_tested[gui_num]
+		m = this.gui_tested[gui_num]
 	} else {
-		m = gui_eye_tested[gui_num]
+		m = this.gui_eye_tested[gui_num]
 	}
 	_, ok := (*m)[key]
 
@@ -51,7 +64,7 @@ func check_add(cards []int32, gui_num int32, eye bool) bool {
 	return true
 }
 
-func parse_table_sub(cards []int32, num int32, eye bool) {
+func (this *xuMod) parse_table_sub(cards []int32, num int32, eye bool) {
 	for i := 0; i < 9; i++ {
 		if cards[i] == 0 {
 			continue
@@ -59,26 +72,26 @@ func parse_table_sub(cards []int32, num int32, eye bool) {
 
 		cards[i]--
 
-		if !check_add(cards, num, eye) {
+		if !this.check_add(cards, num, eye) {
 			cards[i]++
 			continue
 		}
 
-		if num < 8 {
-			parse_table_sub(cards, num+1, eye)
+		if num < this.maxGuiNum {
+			this.parse_table_sub(cards, num+1, eye)
 		}
 		cards[i]++
 	}
 }
 
-func parse_table(cards []int32, eye bool) {
-	if !check_add(cards, 0, eye) {
+func (this *xuMod) parse_table(cards []int32, eye bool) {
+	if !this.check_add(cards, 0, eye) {
 		return
 	}
-	parse_table_sub(cards, 1, eye)
+	this.parse_table_sub(cards, 1, eye)
 }
 
-func gen_111_3(cards []int32, level int, eye bool, maxLevel int) {
+func (this *xuMod) gen_111_3(cards []int32, level int32, eye bool) {
 	for i := 0; i < 16; i++ {
 		if i <= 8 {
 			if cards[i] > 3 {
@@ -95,9 +108,9 @@ func gen_111_3(cards []int32, level int, eye bool, maxLevel int) {
 			cards[index+2]++
 		}
 
-		parse_table(cards, eye)
-		if level < maxLevel {
-			gen_111_3(cards, level+1, eye, maxLevel)
+		this.parse_table(cards, eye)
+		if level < this.maxLevel {
+			this.gen_111_3(cards, level+1, eye)
 		}
 
 		if i <= 8 {
@@ -111,10 +124,10 @@ func gen_111_3(cards []int32, level int, eye bool, maxLevel int) {
 	}
 }
 
-func gen_table(maxLevel int) {
+func (this *xuMod) gen_table() {
 	for i := 0; i < 9; i++ {
-		gui_tested[i] = &map[int32]bool{}
-		gui_eye_tested[i] = &map[int32]bool{}
+		this.gui_tested[i] = &map[int32]bool{}
+		this.gui_eye_tested[i] = &map[int32]bool{}
 	}
 
 	cards := []int32{
@@ -123,7 +136,7 @@ func gen_table(maxLevel int) {
 
 	// 无眼
 	// fmt.Printf("无眼表生成开始\n")
-	gen_111_3(cards, 1, false, maxLevel)
+	this.gen_111_3(cards, 1, false)
 	// fmt.Printf("无眼表生成结束\n")
 
 	// 有眼
@@ -131,14 +144,14 @@ func gen_table(maxLevel int) {
 	for i := 0; i < 9; i++ {
 		cards[i] = 2
 		// fmt.Printf("将 %d \n", i)
-		parse_table(cards, true)
-		gen_111_3(cards, 1, true, maxLevel)
+		this.parse_table(cards, true)
+		this.gen_111_3(cards, 1, true)
 		cards[i] = 0
 	}
 	// fmt.Printf("有眼表生成结束\n")
 
-	gui_tested = [9]*map[int32]bool{}
-	gui_eye_tested = [9]*map[int32]bool{}
+	this.gui_tested = [9]*map[int32]bool{}
+	this.gui_eye_tested = [9]*map[int32]bool{}
 
 	// fmt.Printf("表数据存储开始\n")
 	// TableMod.DumpTable()
