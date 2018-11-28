@@ -20,7 +20,7 @@ func (this *ziMod) zi_check_add(cards []int32, gui_num int32, eye bool) bool {
 	var key int32
 
 	for i := 0; i < 7; i++ {
-		if cards[i] > 4 {
+		if cards[i] > 3 {
 			key = 0
 			break
 		}

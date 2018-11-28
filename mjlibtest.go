@@ -283,16 +283,23 @@ func test_one_success() {
 }
 
 func test_one_fail() {
+	// cards := []int32{
+	// 	0, 1, 1, 1, 0, 0, 1, 0, 1,
+	// 	0, 1, 1, 1, 0, 0, 2, 2, 2,
+	// 	0, 0, 0, 0, 0, 0, 0, 0, 0,
+	// 	0, 0, 0, 0, 0, 0, 0,
+	// }
+
 	cards := []int32{
-		0, 1, 1, 1, 0, 0, 1, 0, 1,
-		0, 1, 1, 1, 0, 0, 2, 2, 2,
+		1, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		4, 0, 0, 0, 0, 0, 0,
 	}
 
 	fmt.Println("测试1种不能和的牌型")
 	print_cards(cards)
-	if !HuMod.GetHuInfo(cards, -1, -1, -1) {
+	if !HuMod.GetHuInfo(cards, -1, 0, -1) {
 		fmt.Println("测试通过：不能和牌")
 	} else {
 		fmt.Println("测试失败：不能和牌的牌型判断为和了")
@@ -324,7 +331,7 @@ func Test() {
 	// TableMod.LoadziTable()
 
 	test_one_success()
-	// test_one_fail()
+	test_one_fail()
 	// test_time(100000000)
 	//    test_two_color()
 }

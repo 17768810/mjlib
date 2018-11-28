@@ -130,7 +130,7 @@ func (this *huMod) _split(cards []int32, gui_num int32, min int, max int, xu boo
 		for i := min; i <= max; i++ {
 			num += cards[i]
 
-			if cards[i] > 4 {
+			if cards[i] > 3 {
 				key = 0
 				break
 			}
