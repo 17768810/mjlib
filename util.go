@@ -65,14 +65,42 @@ func (this *utilMod) GetTingCards(cards []int32, gui_1 int, gui_2 int) (tingCard
 	}
 
 	for i := 0; i < 34; i++ {
-		if i == gui_1 || i == gui_2 {
-			continue
+
+		if i != gui_1 && i != gui_2 {
+			if cards[i]+1 > 4 {
+				continue
+			}
+			cards[i]++
+		} else {
+			if i == gui_1 {
+				if gui_num_1+1 > 4 {
+					continue
+				}
+				gui_num_1++
+			}
+			if i == gui_2 {
+				if gui_num_2+1 > 4 {
+					continue
+				}
+				gui_num_2++
+			}
 		}
-		cards[i]++
+
 		if HuMod.split(cards, gui_num_1+gui_num_2) {
 			tingCards = append(tingCards, i)
 		}
-		cards[i]--
+
+		if i != gui_1 && i != gui_2 {
+			cards[i]--
+		} else {
+			if i == gui_1 {
+				gui_num_1--
+			}
+			if i == gui_2 {
+				gui_num_2--
+			}
+		}
+
 	}
 
 	if gui_1 != INVALID_CARD {
