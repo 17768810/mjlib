@@ -48,7 +48,7 @@ func (this *utilMod) GetAAAList(cards []int32) (aaaList []int) {
 	return
 }
 
-func (this *utilMod) GetTingCards(cards []int32, hu bool, gui_1 int, gui_2 int) (tingCards []int) {
+func (this *utilMod) GetTingCards(cards []int32, gui_1 int, gui_2 int) (tingCards []int) {
 	var (
 		gui_num_1 int32
 		gui_num_2 int32
@@ -64,27 +64,15 @@ func (this *utilMod) GetTingCards(cards []int32, hu bool, gui_1 int, gui_2 int) 
 		cards[gui_2] = 0
 	}
 
-	if !hu {
-		for i := 0; i < 34; i++ {
-			if i == gui_1 || i == gui_2 {
-				continue
-			}
-			cards[i]++
-			if HuMod.split(cards, gui_num_1+gui_num_2) {
-				tingCards = append(tingCards, i)
-			}
-			cards[i]--
+	for i := 0; i < 34; i++ {
+		if i == gui_1 || i == gui_2 {
+			continue
 		}
-	} else {
-		for i := 0; i < 34; i++ {
-			if cards[i] > 0 {
-				cards[i]--
-				if HuMod.split(cards, gui_num_1+gui_num_2+1) {
-					tingCards = append(tingCards, i)
-				}
-				cards[i]++
-			}
+		cards[i]++
+		if HuMod.split(cards, gui_num_1+gui_num_2) {
+			tingCards = append(tingCards, i)
 		}
+		cards[i]--
 	}
 
 	if gui_1 != INVALID_CARD {
