@@ -165,7 +165,7 @@ func (this *huMod) Check7Dui(cards []int32, gui_num int32) bool {
 	var need int32
 	for i := 0; i < 34; i++ {
 		if cards[i]%2 != 0 {
-			need = need + 1
+			need++
 		}
 	}
 
