@@ -39,15 +39,6 @@ func (this *utilMod) GetEye(cards []int32) int {
 	return -1
 }
 
-func (this *utilMod) GetAAAList(cards []int32) (aaaList []int) {
-	for i := 0; i < 34; i++ {
-		if cards[i] >= 3 {
-			aaaList = append(aaaList, i)
-		}
-	}
-	return
-}
-
 func (this *utilMod) GetTingCards(cards []int32, gui_1 int, gui_2 int) (tingCards []int) {
 	var (
 		gui_num_1 int32
@@ -111,5 +102,23 @@ func (this *utilMod) GetTingCards(cards []int32, gui_1 int, gui_2 int) (tingCard
 		cards[gui_2] = gui_num_2
 	}
 
+	return
+}
+
+func (this *utilMod) GetCardListByNum(cards []int32, num int32) (cardList []int) {
+	for i := 0; i < 34; i++ {
+		if cards[i] == num {
+			cardList = append(cardList, i)
+		}
+	}
+	return
+}
+
+func (this *utilMod) GetAAAList(cards []int32) (aaaList []int) {
+	for i := 0; i < 34; i++ {
+		if cards[i] >= 3 {
+			aaaList = append(aaaList, i)
+		}
+	}
 	return
 }
